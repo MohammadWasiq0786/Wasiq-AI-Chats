@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - Wasiq AI Chats</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="admin-container">
+        <h1>👑 Admin Dashboard</h1>
+
+        <section>
+            <h2>🧑‍💻 Users</h2>
+            <table>
+                <tr><th>ID</th><th>Username</th><th>Email</th><th>Admin</th></tr>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ '✅' if user.is_admin else '❌' }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </section>
+
+        <section>
+            <h2>📝 Recent Logs</h2>
+            <table>
+                <tr><th>Timestamp</th><th>Actor</th><th>Action</th></tr>
+                {% for log in logs %}
+                    <tr>
+                        <td>{{ log.timestamp }}</td>
+                        <td>{{ log.actor }}</td>
+                        <td>{{ log.action }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </section>
+
+        <button onclick="window.location.href='/chat'">⬅️ Back to Chat</button>
+    </div>
+</body>
+</html>

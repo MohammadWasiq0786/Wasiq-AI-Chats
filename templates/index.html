@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WasiqAIChats</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" />
+  <script src="https://kit.fontawesome.com/a2e0a4e8d5.js" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --primary-color: #4F46E5;
+      --accent-color: #10B981;
+      --background-gradient: linear-gradient(to right, #4F46E5, #10B981);
+      --text-color: #ffffff;
+      --card-bg: rgba(255, 255, 255, 0.1);
+      --btn-bg: #ffffff;
+      --btn-text: #4F46E5;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Poppins', sans-serif;
+      background: var(--background-gradient);
+      color: var(--text-color);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      padding: 0.5rem 0.8rem;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: background 0.3s;
+      z-index: 999;
+    }
+
+    .theme-toggle:hover {
+      background: #E5E7EB;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      padding: 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .app-title-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(15px);
+      padding: 1.5rem 3rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      animation: fadeIn 1s ease;
+    }
+
+    .app-title-card h1 {
+      font-size: 2.8rem;
+      color: var(--btn-bg);
+    }
+
+    .description {
+      font-size: 1.15rem;
+      color: #f3f4f6;
+      max-width: 700px;
+    }
+
+    .cards-wrapper {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(15px);
+      padding: 2rem 2.5rem;
+      border-radius: 15px;
+      width: 250px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .card button {
+      background: var(--btn-bg);
+      color: var(--btn-text);
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: background 0.3s ease;
+    }
+
+    .card button:hover {
+      background: #f3f4f6;
+    }
+
+    /* Social media bar at bottom-left */
+    .social-bar {
+      position: fixed;
+      bottom: 1rem;
+      left: 1rem;
+      background: var(--card-bg);
+      backdrop-filter: blur(15px);
+      padding: 0.8rem 1.2rem;
+      border-radius: 30px;
+      display: flex;
+      gap: 1.2rem;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+      z-index: 100;
+    }
+
+    .social-bar a {
+      color: #ffffff;
+      font-size: 1.4rem;
+      transition: color 0.3s;
+      text-decoration: none;
+    }
+
+    .social-bar a:hover {
+      color: var(--accent-color);
+    }
+
+    footer {
+      background: rgba(0, 0, 0, 0.2);
+      text-align: center;
+      padding: 1rem 0;
+      font-size: 0.95rem;
+      color: #D1D5DB;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .cards-wrapper {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .social-bar {
+        left: 50%;
+        transform: translateX(-50%);
+        flex-wrap: wrap;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Theme Toggle Button -->
+  <!-- <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button> -->
+
+  <main>
+    <!-- App Title -->
+    <div class="app-title-card">
+      <h1><i class="fas fa-comments"></i> Wasiq AI Chats</h1>
+    </div>
+
+    <!-- Description -->
+    <p class="description">
+      Welcome to <strong>Wasiq AI Chats</strong> – your smart AI chat platform.
+      Join now and start intelligent conversations instantly.
+    </p>
+
+    <!-- Auth Buttons -->
+    <div class="cards-wrapper">
+      <div class="card">
+        <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+        <button onclick="location.href='/login'">Login</button>
+      </div>
+      <div class="card">
+        <h2><i class="fas fa-user-plus"></i> Register</h2>
+        <button onclick="location.href='/register'">Register</button>
+      </div>
+    </div>
+
+    <!-- Social Media Icons Bar -->
+    
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2025 Wasiq AI Chats. All rights reserved.
+  </footer>
+
+  <!-- Theme Toggle Script -->
+  <script>
+    function toggleTheme() {
+      const btn = document.querySelector('.theme-toggle i');
+      document.body.classList.toggle('dark-mode');
+      btn.classList.toggle('fa-moon');
+      btn.classList.toggle('fa-sun');
+
+      if (document.body.classList.contains('dark-mode')) {
+        document.documentElement.style.setProperty('--background-gradient', 'linear-gradient(135deg, #0f172a, #1f2937)');
+        document.documentElement.style.setProperty('--btn-bg', '#1e293b');
+        document.documentElement.style.setProperty('--btn-text', '#F9FAFB');
+        document.documentElement.style.setProperty('--text-color', '#ffffff');
+      } else {
+        document.documentElement.style.setProperty('--background-gradient', 'linear-gradient(to right, #4F46E5, #10B981)');
+        document.documentElement.style.setProperty('--btn-bg', '#ffffff');
+        document.documentElement.style.setProperty('--btn-text', '#4F46E5');
+        document.documentElement.style.setProperty('--text-color', '#ffffff');
+      }
+    }
+  </script>
+</body>
+</html>

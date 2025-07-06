@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wasiq AI Chats</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      display: flex;
+      height: 100vh;
+      margin: 0;
+      background-color: #ecf0f1;
+      transition: background-color 0.3s, zoom 0.3s;
+    }
+    .sidebar {
+      width: 250px;
+      background-color: #2c3e50;
+      color: white;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .sidebar h3 {
+      text-align: center;
+    }
+    .profile-image {
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      margin: 10px auto;
+      border: 2px solid #3498db;
+      object-fit: cover;
+    }
+    .sidebar ul {
+      list-style: none;
+      padding: 0;
+    }
+    .sidebar ul li {
+      padding: 10px;
+      background-color: #34495e;
+      margin-bottom: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .sidebar ul li:hover,
+    .sidebar ul li.active {
+      background-color: #e74c3c;
+    }
+    .sidebar button {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 10px;
+      margin-top: 10px;
+      width: 100%;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .sidebar button:hover {
+      background-color: #c0392b;
+    }
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    h1, h4 {
+      text-align: center;
+      margin: 5px;
+    }
+    .chat-box {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      background-color: white;
+      border: 1px solid #bdc3c7;
+      margin-bottom: 10px;
+    }
+    .chat-box pre {
+      background-color: #f0f8ff;
+      padding: 10px;
+      border-radius: 5px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-bottom: 10px;
+    }
+    .input-area {
+      display: flex;
+      position: relative;
+    }
+    .input-area input {
+      flex: 1;
+      padding: 15px;
+      border-radius: 25px;
+      border: 1px solid #bdc3c7;
+      outline: none;
+    }
+    .input-area button {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      background-color: #3498db;
+      color: white;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .input-area button:hover {
+      background-color: #2980b9;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    .modal-content {
+      background-color: white;
+      margin: 10% auto;
+      padding: 25px;
+      border-radius: 15px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    .modal-header,
+    .modal-footer {
+      background: linear-gradient(to right, #3498db, #2ecc71);
+      color: white;
+      padding: 15px;
+      border-radius: 10px 10px 0 0;
+      text-align: center;
+    }
+    .modal-footer {
+      border-radius: 0 0 10px 10px;
+    }
+    .modal-body {
+      padding: 20px;
+    }
+    .close {
+      float: right;
+      font-size: 28px;
+      cursor: pointer;
+    }
+    .theme-option {
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      text-align: center;
+    }
+    .theme-option:hover {
+      background-color: #2980b9;
+    }
+
+        .logout-btn {
+      background: #ef4444;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s, transform 0.2s;
+    }
+    .logout-btn:hover {
+      background: #dc2626;
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div class="sidebar">
+  <h3>WasiqAIChats</h3>
+  <img src="{{ url_for('static', filename='wasiq.jpg') }}" alt="Profile" class="profile-image" />
+  <hr>
+  <ul id="chat-list"></ul>
+  <hr>
+  <button onclick="createNewChat()">New Chat</button>
+  <button onclick="deleteSelectedChats()">Delete Chat</button>
+  <button onclick="openSettings()">Settings</button>
+   <button class="logout-btn" onclick="window.location.href='/logout'">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+</div>
+
+
+<!-- Main Area -->
+<div class="main-content">
+  <h1>Wasiq AI Chats</h1>
+  <h4>How may I help you today?</h4>
+  <div class="chat-box" id="chat-box">
+    <pre>Welcome to the chat! Start a conversation.</pre>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div id="loading-spinner" style="display:none;text-align:center;">
+    <i class="fas fa-spinner fa-spin" style="font-size: 24px; color: #3498db;"></i>
+    <p>Loading...</p>
+  </div>
+
+  <!-- Input -->
+  <div class="input-area">
+    <input type="text" id="user-input" placeholder="Type your query...">
+    <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+  </div>
+</div>
+
+<!-- Modal -->
+<div id="settingsModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close" onclick="closeSettings()">&times;</span>
+      <h2>Settings</h2>
+    </div>
+    <div class="modal-body">
+      <h3>Choose Theme</h3>
+      <div class="theme-option" onclick="changeTheme('default')">Default</div>
+      <div class="theme-option" onclick="changeTheme('dark')">Dark</div>
+      <div class="theme-option" onclick="changeTheme('light')">Light</div>
+      <div class="theme-option" onclick="changeTheme('blue')">Blue</div>
+      <hr>
+      <h3>Zoom</h3>
+      <button onclick="zoomIn()">Zoom In</button>
+      <button onclick="zoomOut()">Zoom Out</button>
+    </div>
+    <div class="modal-footer">
+      <button onclick="closeSettings()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let activeChatId = 1;
+  let currentZoom = 1;
+
+  function loadChats() {
+    fetch('/get_chats')
+      .then(res => res.json())
+      .then(data => {
+        const chatList = document.getElementById('chat-list');
+        chatList.innerHTML = '';
+        data.chats.forEach(chat => {
+          const li = document.createElement('li');
+          li.textContent = chat.name;
+          li.className = chat.id === activeChatId ? 'active' : '';
+          li.onclick = () => selectChat(chat.id);
+          chatList.appendChild(li);
+        });
+      });
+  }
+
+  function selectChat(chatId) {
+    activeChatId = chatId;
+    loadChats();
+    loadChatHistory(chatId);
+  }
+
+  function loadChatHistory(chatId) {
+    fetch(`/get_chat_history?chat_id=${chatId}`)
+      .then(res => res.json())
+      .then(data => {
+        const chatBox = document.getElementById('chat-box');
+        chatBox.innerHTML = '';
+        data.messages.forEach(msg => {
+          const el = document.createElement('pre');
+          el.textContent = msg.text;
+          chatBox.appendChild(el);
+        });
+      });
+  }
+
+  function createNewChat() {
+    const chatName = prompt("Enter new chat name:");
+    if (chatName) {
+      fetch('/new_chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_name: chatName })
+      })
+      .then(res => res.json())
+      .then(data => {
+        loadChats();
+        selectChat(data.chat_id);
+      });
+    }
+  }
+
+  function deleteSelectedChats() {
+    if (confirm("Are you sure?")) {
+      fetch('/delete_chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: activeChatId })
+      })
+      .then(res => res.json())
+      .then(() => {
+        loadChats();
+        document.getElementById('chat-box').innerHTML = '';
+      });
+    }
+  }
+
+  function sendMessage() {
+    const inputEl = document.getElementById("user-input");
+    const userText = inputEl.value.trim();
+    if (!userText) return;
+
+    const chatBox = document.getElementById("chat-box");
+    const userMsg = document.createElement('pre');
+    userMsg.textContent = `User: ${userText}`;
+    chatBox.appendChild(userMsg);
+    inputEl.value = '';
+    document.getElementById('loading-spinner').style.display = 'block';
+
+    fetch('/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ input: userText, chat_id: activeChatId })
+    })
+    .then(res => res.json())
+    .then(data => {
+      const aiBlock = document.createElement('div');
+      if (data.response.includes("```")) {
+        const codeMatch = data.response.match(/```(?:[a-z]*\n)?([\s\S]*?)```/i);
+        const beforeCode = data.response.split("```")[0];
+
+        if (beforeCode) {
+          const beforeText = document.createElement('pre');
+          beforeText.textContent = `AI: ${beforeCode.trim()}`;
+          chatBox.appendChild(beforeText);
+        }
+
+        const codeEl = document.createElement('pre');
+        const code = document.createElement('code');
+        code.className = 'language-python';
+        code.textContent = codeMatch[1];
+        codeEl.appendChild(code);
+        chatBox.appendChild(codeEl);
+        hljs.highlightElement(code);
+      } else {
+        const aiText = document.createElement('pre');
+        aiText.textContent = `AI: ${data.response}`;
+        chatBox.appendChild(aiText);
+      }
+
+      chatBox.scrollTop = chatBox.scrollHeight;
+      document.getElementById('loading-spinner').style.display = 'none';
+    });
+  }
+
+  function openSettings() {
+    document.getElementById("settingsModal").style.display = "block";
+  }
+
+  function closeSettings() {
+    document.getElementById("settingsModal").style.display = "none";
+  }
+
+  function changeTheme(theme) {
+    const body = document.body;
+    switch (theme) {
+      case 'dark':
+        body.style.backgroundColor = '#2c3e50';
+        break;
+      case 'light':
+        body.style.backgroundColor = '#fefefe';
+        break;
+      case 'blue':
+        body.style.backgroundColor = '#e0f7fa';
+        break;
+      default:
+        body.style.backgroundColor = '#ecf0f1';
+    }
+  }
+
+  function zoomIn() {
+    currentZoom += 0.1;
+    document.body.style.zoom = currentZoom;
+  }
+
+  function zoomOut() {
+    currentZoom = Math.max(0.5, currentZoom - 0.1);
+    document.body.style.zoom = currentZoom;
+  }
+
+  window.onload = () => {
+    loadChats();
+    document.getElementById('user-input').addEventListener('keypress', e => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  };
+</script>
+</body>
+</html>
