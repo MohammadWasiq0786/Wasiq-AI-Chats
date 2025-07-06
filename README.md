@@ -17,9 +17,9 @@ A full-stack AI-powered chat application, token/session-based authentication, ch
 
 ### Demo
 
-![home](./WasiqAIChats/media/home.png)
+![home](https://github.com/MohammadWasiq0786/Wasiq-AI-Chats/blob/main/media/home.png)
 
-![chat](./WasiqAIChats/media/chat.png)
+![chat](https://github.com/MohammadWasiq0786/Wasiq-AI-Chats/blob/main/media/chat.png)
 
 ---
 
